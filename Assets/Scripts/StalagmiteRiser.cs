@@ -6,7 +6,7 @@ public class StalagmiteRiser : MonoBehaviour {
     public Transform stalagmite;
     public Transform player;
     public Transform toilet;
-    private float maxDistance = 40;
+    private float maxDistance = 27;
     private float maxStalagmiteHeight = -10;
     private float heightDiff;
 
