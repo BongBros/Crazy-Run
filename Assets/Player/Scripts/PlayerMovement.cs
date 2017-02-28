@@ -18,8 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private bool m_Sliding;             // Whether or not the player is sliding
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
-    private Animator m_Anim;            // Reference to the player's animator component
-    private Rigidbody2D m_Rigidbody2D;
+    private Rigidbody m_Rigidbody;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing
 
     private void Awake()
@@ -27,8 +26,7 @@ public class PlayerMovement : MonoBehaviour
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         m_CeilingCheck = transform.Find("CeilingCheck");
-        m_Anim = GetComponent<Animator>();
-        m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
 
 
@@ -44,30 +42,20 @@ public class PlayerMovement : MonoBehaviour
             if (colliders[i].gameObject != gameObject)
                 m_Grounded = true;
         }
-        m_Anim.SetBool("Ground", m_Grounded);
-
-        // Set the vertical animation
-        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
     }
 
 
     public void Move(float move, bool slide, bool jump)
     {
+
         TriggerSliding(slide);
 
-        if (m_Sliding)
-        {
-            // Turn off crouching animation
-            m_Anim.SetFloat("Speed", 0);
-        }
         //only control the player if on ground and not sliding
         if (m_Grounded && !m_Sliding)
         {
-            // The Speed animator parameter is set to the absolute value of the horizontal input.
-            m_Anim.SetFloat("Speed", Mathf.Abs(move));
 
             // Move the character
-            m_Rigidbody2D.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody2D.velocity.y);
+            m_Rigidbody.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody.velocity.y);
 
             // If the input is moving the player right and the player is facing left...
             if (move > 0 && !m_FacingRight)
@@ -111,22 +99,20 @@ public class PlayerMovement : MonoBehaviour
     private void SetSliding(bool slide)
     {
         m_Sliding = slide;
-        m_Anim.SetBool("Crouch", slide);
     }
 
     private void TriggerJump(bool jump)
     {
         // If the player should jump...
-        if (m_Grounded && jump && m_Anim.GetBool("Ground"))
+        if (m_Grounded && jump)
         {
             // Add a vertical force to the player.
             m_Grounded = false;
-            m_Anim.SetBool("Ground", false);
 
             // Otherwise character jumps lower when moving down (e.g. on a ramp)
-            m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0f);
+            m_Rigidbody.velocity = new Vector2(m_Rigidbody.velocity.x, 0f);
 
-            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            m_Rigidbody.AddForce(new Vector2(0f, m_JumpForce));
         }
     }
 
