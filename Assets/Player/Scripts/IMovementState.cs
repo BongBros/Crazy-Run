@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IMovementState {
 
-    void processInput(PlayerInput input);
-
+    void ProcessInput(PlayerInput input);
+    void Grounded();
+    void LostGround();
 }

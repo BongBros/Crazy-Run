@@ -4,18 +4,16 @@ using UnityStandardAssets.CrossPlatformInput;
 
 
 [RequireComponent(typeof(Movement))]
-public class PlayerControls : MonoBehaviour
+public class Controls : MonoBehaviour
 {
     private Movement m_movement;
     private bool m_Jump;
-
-
+    
     private void Awake()
     {
         m_movement = GetComponent<Movement>();
     }
-
-
+    
     private void Update()
     {
         if (!m_Jump)
@@ -28,11 +26,12 @@ public class PlayerControls : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Read the inputs.
-        bool slide = Input.GetKey(KeyCode.DownArrow);
-        float h = CrossPlatformInputManager.GetAxis("Horizontal");
         // Pass all parameters to the character control script.
-        m_movement.processInput(h, slide, m_Jump);
+        PlayerInput playerInput = new PlayerInput();
+        playerInput.slide = Input.GetKey(KeyCode.DownArrow);
+        playerInput.jump = m_Jump;
+        playerInput.horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
+        m_movement.ProcessInput(playerInput);
         m_Jump = false;
     }
 }

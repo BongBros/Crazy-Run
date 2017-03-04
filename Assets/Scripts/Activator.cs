@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Activator : MonoBehaviour {
 
-    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private Movement playerMovement;
     [SerializeField] private ParticleSystem flames;
     
 	// Use this for initialization
