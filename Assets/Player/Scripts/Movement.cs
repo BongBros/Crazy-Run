@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public class PlayerMovement : MonoBehaviour
+public class Movement : MonoBehaviour, IMovementState, IMovementControl, IStateContext //TODO IMovementEffects - particles from sliding etc...
 {
 
     [SerializeField]
@@ -15,14 +15,13 @@ public class PlayerMovement : MonoBehaviour
     private Transform m_GroundCheck;    // A position marking where to check if the player is grounded
     const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded;            // Whether or not the player is grounded
-    private bool m_Sliding;             // Whether or not the player is sliding
     private Transform m_CeilingCheck;   // A position marking where to check for ceilings
     const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
     private Rigidbody m_Rigidbody;
-    private bool m_FacingRight = true;  // For determining which way the player is currently facing
 
     private void Awake()
     {
+
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         m_CeilingCheck = transform.Find("CeilingCheck");
@@ -44,6 +43,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public Vector2 getMovementVector()
+    {
+        return m_Rigidbody.velocity;
+    }
+
+    public void setMovementVector(Vector2 vector)
+    {
+        m_Rigidbody.velocity = vector;
+    }
 
     public void Move(float move, bool slide, bool jump)
     {
@@ -57,18 +65,6 @@ public class PlayerMovement : MonoBehaviour
             // Move the character
             m_Rigidbody.velocity = new Vector2(move * m_MaxSpeed, m_Rigidbody.velocity.y);
 
-            // If the input is moving the player right and the player is facing left...
-            if (move > 0 && !m_FacingRight)
-            {
-                // ... flip the player.
-                Flip();
-            }
-            // Otherwise if the input is moving the player left and the player is facing right...
-            else if (move < 0 && m_FacingRight)
-            {
-                // ... flip the player.
-                Flip();
-            }
         }
 
         TriggerJump(jump);
@@ -116,26 +112,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Flip()
+    public void processInput(PlayerInput input)
     {
-        // Switch the way the player is labelled as facing.
-        m_FacingRight = !m_FacingRight;
-
-        // Multiply the player's x local scale by -1.
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        currentState.processInput(input);
     }
-
-    private bool isRunning()
-    {
-        return m_Grounded && !m_Sliding;
-    }
-
-    private bool isInAir()
-    {
-        return !m_Grounded;
-    }
-
 }
 

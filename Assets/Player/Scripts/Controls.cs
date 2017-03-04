@@ -3,16 +3,16 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 
-[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(Movement))]
 public class PlayerControls : MonoBehaviour
 {
-    private PlayerMovement m_Character;
+    private Movement m_movement;
     private bool m_Jump;
 
 
     private void Awake()
     {
-        m_Character = GetComponent<PlayerMovement>();
+        m_movement = GetComponent<Movement>();
     }
 
 
@@ -32,7 +32,7 @@ public class PlayerControls : MonoBehaviour
         bool slide = Input.GetKey(KeyCode.DownArrow);
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
         // Pass all parameters to the character control script.
-        m_Character.Move(h, slide, m_Jump);
+        m_movement.processInput(h, slide, m_Jump);
         m_Jump = false;
     }
 }
