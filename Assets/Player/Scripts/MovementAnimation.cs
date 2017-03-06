@@ -26,6 +26,7 @@ class MovementAnimation : IMovementAnimation
     public void Slide()
     {
         transform.localScale = new Vector3(1f, 0.5f, 1f);
-
+		Vector3 pos = transform.position;
+		//transform.position = new Vector3(pos.x, pos.y - 0.3f, pos.z);
     }
 }
