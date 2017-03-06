@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class SlidingMovementState : MovementStateAdapter
 {
+    private int slideDownForce;
 
-    public SlidingMovementState(IMachineContext machineContext) : base(machineContext)
+    public SlidingMovementState(IMachineContext machineContext, int slideDownForce) : base(machineContext)
     {
-
+        this.slideDownForce = slideDownForce;
     }
 
     public override void OnEnter()
     {
+        control.SetConstantDownForce(slideDownForce);
         animator.Slide();
     }
 
@@ -32,5 +34,10 @@ public class SlidingMovementState : MovementStateAdapter
     public override void LostGround()
     {
         context.SwitchState(factory.createFallingState());
+    }
+
+    public void onExit()
+    {
+        control.SetConstantDownForce(0);
     }
 }

@@ -8,6 +8,8 @@ public class StateFactory : MonoBehaviour, IStateFactory
 {
     [SerializeField]
     private int downForce; // causes player to fall faster
+    [SerializeField]
+    private int slideDownForce; // causes player to slide faster
 
     [SerializeField]
     private float runMaxSpeed; // The fastest the player can run in the x axis
@@ -47,11 +49,9 @@ public class StateFactory : MonoBehaviour, IStateFactory
 
     public IMovementState createSlidingState()
     {
-        return new SlidingMovementState(GetMachineContext());
+        return new SlidingMovementState(GetMachineContext(), slideDownForce);
     }
-
-
-
+    
     private IMachineContext GetMachineContext()
     {
         return this.m_MachineContext = new MachineContext(movement, movement, this, movement.getAnimator());
