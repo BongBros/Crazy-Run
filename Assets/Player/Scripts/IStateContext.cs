@@ -1,4 +1,4 @@
 ﻿public interface IStateContext
 {
-    void switchState(IMovementState state);
+    void SwitchState(IMovementState state);
 }

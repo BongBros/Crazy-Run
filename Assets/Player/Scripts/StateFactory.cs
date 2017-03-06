@@ -7,24 +7,54 @@ using UnityEngine;
 public class StateFactory : MonoBehaviour, IStateFactory
 {
     [SerializeField]
-    private float m_MaxSpeed = 10f;                    // The fastest the player can travel in the x axis
-    [SerializeField]
-    private float m_JumpForce = 400f;                  // Amount of force added when the player jumps
-    private MachineContext m_MachineContext;
+    private int downForce; // causes player to fall faster
 
-    private void Start()
+    [SerializeField]
+    private float runMaxSpeed; // The fastest the player can run in the x axis
+    [SerializeField]
+    private float runAcceleration; // The fastest the player can run in the x axis
+
+    [SerializeField]
+    private float jumpForceInitial; // Amount of force added when the player initiates a jumps
+    [SerializeField]
+    private float jumpForceSustain; // Amount of force added when the player holds a jump
+    [SerializeField]
+    private int jumpSustainLength; // How long a player can hold a jump
+                
+    private MachineContext m_MachineContext;
+    private Movement movement;
+
+    private void Awake()
     {
-        Movement movement = GetComponent<Movement>(); //TODO inject..
-        this.m_MachineContext = new MachineContext(movement, movement, this);
+        this.movement = GetComponent<Movement>(); //TODO inject..
+        
     }
     
-    public JumpingMovementState createJumpingState()
+    public IMovementState createJumpingState()
     {
-        return new JumpingMovementState(m_MachineContext, m_JumpForce);
+        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, downForce);
     }
 
-    public RunningMovementState createRunningState()
+    public IMovementState createRunningState()
     {
-        return new RunningMovementState(m_MachineContext, m_MaxSpeed);
+        return new RunningMovementState(GetMachineContext(), runMaxSpeed, runAcceleration);
     }
+
+    public IMovementState createFallingState()
+    {
+        return new FallingMovementState(GetMachineContext(), downForce);
+    }
+
+    public IMovementState createSlidingState()
+    {
+        return new SlidingMovementState(GetMachineContext());
+    }
+
+
+
+    private IMachineContext GetMachineContext()
+    {
+        return this.m_MachineContext = new MachineContext(movement, movement, this, movement.getAnimator());
+    }
+
 }

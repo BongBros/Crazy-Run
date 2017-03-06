@@ -2,7 +2,8 @@
 
 public interface IMovementControl
 {
-    void setMovementVector(Vector2 vector);
-    Vector2 getMovementVector();
+    void SetMovementVector(Vector2 vector);
+    Vector2 GetMovementVector();
     void AddForce(Vector2 vector);
+    void SetConstantDownForce(float force);
 }

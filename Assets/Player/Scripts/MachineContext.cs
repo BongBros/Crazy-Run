@@ -6,12 +6,14 @@ public class MachineContext : IMachineContext
     private IMovementControl movementControl;
     private Movement movement;
     private IStateFactory stateFactory;
+    private IMovementAnimation animator;
 
-    public MachineContext(IStateContext stateContext, IMovementControl movementControl, IStateFactory stateFactory)
+    public MachineContext(IStateContext stateContext, IMovementControl movementControl, IStateFactory stateFactory, IMovementAnimation animator)
     {
         this.stateFactory = stateFactory;
         this.stateContext = stateContext;
         this.movementControl = movementControl;
+        this.animator = animator;
     }
 
     public IStateContext getStateContext()
@@ -27,5 +29,10 @@ public class MachineContext : IMachineContext
     public IStateFactory getStateFactory()
     {
         return stateFactory;
+    }
+
+    public IMovementAnimation getAnimator()
+    {
+        return animator;
     }
 }

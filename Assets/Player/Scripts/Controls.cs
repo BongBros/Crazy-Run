@@ -6,21 +6,33 @@ using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof(Movement))]
 public class Controls : MonoBehaviour
 {
-    private Movement m_movement;
-    private bool m_Jump;
+    private Movement movement;
+    private bool jump;
     
     private void Awake()
     {
-        m_movement = GetComponent<Movement>();
+        movement = GetComponent<Movement>();
     }
     
     private void Update()
     {
-        if (!m_Jump)
+        // Read the jump input in Update so button presses aren't missed.
+        if (!jump)
         {
-            // Read the jump input in Update so button presses aren't missed.
-            m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+            if (CrossPlatformInputManager.GetButtonDown("Jump")) {
+                Debug.Log("Jump initiated", movement);
+                jump = true;
+            }
+        } else
+        {
+            if (CrossPlatformInputManager.GetButtonUp("Jump"))
+            {
+                Debug.Log("Jump finished", movement);
+                jump = false;
+            }
         }
+
+
     }
 
 
@@ -29,9 +41,9 @@ public class Controls : MonoBehaviour
         // Pass all parameters to the character control script.
         PlayerInput playerInput = new PlayerInput();
         playerInput.slide = Input.GetKey(KeyCode.DownArrow);
-        playerInput.jump = m_Jump;
+        playerInput.jump = jump;
         playerInput.horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
-        m_movement.ProcessInput(playerInput);
-        m_Jump = false;
+        movement.ProcessInput(playerInput);
+        
     }
 }
