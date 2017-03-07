@@ -23,10 +23,10 @@ public class JumpingMovementState : MovementStateAdapter
 
     public override void OnEnter()
     {
-        control.SetMovementVector(new Vector2(control.GetMovementVector().x, 0f));
+        //control.SetMovementVector(new Vector2(control.GetMovementVector().x, 0f));
         control.SetConstantDownForce(downForce);
         control.AddForce(new Vector2(0f, jumpForceInitial));
-
+        animator.Jump();
 
     }
 
