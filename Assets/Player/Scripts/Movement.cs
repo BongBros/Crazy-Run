@@ -5,7 +5,7 @@ using UnityEngine;
 //Fix/tweak:
 // * when a player jumps but does not leave the ground (e.g. jumps reeeeaaaaally low and ground collision is always active) he freezes in jumping state
 // * before jumping Y velocity is reset so that jump height is the same no matter the current motion direction - this might be a cool feature though but right now causes the above issue if jump is held for the whole duration (player jumps right after landing)
-
+// * delta time https://unity3d.com/learn/tutorials/topics/scripting/delta-time
 public class Movement : MonoBehaviour, IMovementControl, IStateContext //TODO IMovementEffects - particles from sliding etc...
 {
     private Rigidbody m_Rigidbody;
