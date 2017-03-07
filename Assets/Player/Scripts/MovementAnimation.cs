@@ -16,6 +16,7 @@ class MovementAnimation : IMovementAnimation
     public void Default()
     {
         transform.localScale = new Vector3(1f, 1f, 1f);
+        transform.localPosition = new Vector3(0f, 0f, 0f);
     }
 
     public void Jump()
@@ -27,6 +28,6 @@ class MovementAnimation : IMovementAnimation
     {
         transform.localScale = new Vector3(1f, 0.5f, 1f);
 		Vector3 pos = transform.position;
-		//transform.position = new Vector3(pos.x, pos.y - 0.3f, pos.z);
+		transform.position = new Vector3(pos.x, pos.y - 0.3f, pos.z);
     }
 }

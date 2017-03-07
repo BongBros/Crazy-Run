@@ -6,23 +6,61 @@ using UnityEngine;
 
 public class StateFactory : MonoBehaviour, IStateFactory
 {
-    [SerializeField]
-    private int downForce; // causes player to fall faster
-    [SerializeField]
-    private int slideDownForce; // causes player to slide faster
 
+    //RUNNING
+    // if acceleration causes the X vector coordinate to be larger than runMaxSpeed then it is set to runMaxSpeed
+    // the fastest the player can run in the x axis
     [SerializeField]
-    private float runMaxSpeed; // The fastest the player can run in the x axis
+    private float runMaxSpeed;
+    
+    //RUNNING
+    // adds runAcceleration to X vector coordinate on every frame when the rigidbody is moving in the direction intended by the player (rigidbody goes right and player holds right)
+    // how fast the player reaches max speed (linear acceleration)
     [SerializeField]
-    private float runAcceleration; // The fastest the player can run in the x axis
+    private float runAcceleration;
 
+    //RUNNING
+    // subtracts runResponsivenes from X vector coordinate on every frame when the rigidbody is not moving in the direction intended by the player (rigidbody goes right and player holds left or isn't holding any direction)
+    // how fast the player stops (may reduce the sliding effect) and changes direction
     [SerializeField]
-    private float jumpForceInitial; // Amount of force added when the player initiates a jumps
+    private float runResponsiveness;
+
+    //RUNNING
+    // if the X vector coordinate is larger than runMaxSpeed then runDeceleration is subtracted on every frame until the X vector is equal to runMaxSpeed
+    // how fast the player slows down to max running speed (i.e. is sliding faster than max speed and starts to run)
     [SerializeField]
-    private float jumpForceSustain; // Amount of force added when the player holds a jump
+    private float runDeceleration;
+
+    //JUMPING
+    // instant force added along Y vector coordinate at the beginning of the jump
+    // how high the player can jump by pressing the jump button
     [SerializeField]
-    private int jumpSustainLength; // How long a player can hold a jump
-                
+    private float jumpForceInitial;
+
+    //JUMPING
+    // force added along Y vector coordinate on every frame when still holding the jump button
+    // how much higher the player can jump by holding the jump button (works like a jetpack)
+    [SerializeField]
+    private float jumpForceSustain;
+
+    //JUMPING
+    // number of frames that jump sustain takes effect for (i.e. when jumpSustainLength frames have passed since initiating the jump but the player still holds down the button it won't take effect)
+    // how long is the additional jump force applied
+    [SerializeField]
+    private int jumpSustainLength;
+
+    //JUMPING and FALLING
+    // constant downward force(0, -downForce, 0) applied on every frame
+    // causes player to fall faster when increased but also to jump lower; combined with increasing of jump force the player may jump with the same height but going faster up and down
+    [SerializeField]
+    private int inAirDownForce;
+
+    //SLIDING
+    // constant downward force (0, -slideDownForce, 0) applied on every frame
+    // causes player to slide faster on steeper slopes, but might be slower on narrower slopes (depens on sliding friction though)
+    [SerializeField]
+    private int slideDownForce;
+
     private MachineContext m_MachineContext;
     private Movement movement;
 
@@ -34,17 +72,17 @@ public class StateFactory : MonoBehaviour, IStateFactory
     
     public IMovementState createJumpingState()
     {
-        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, downForce);
+        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce);
     }
 
     public IMovementState createRunningState()
     {
-        return new RunningMovementState(GetMachineContext(), runMaxSpeed, runAcceleration);
+        return new RunningMovementState(GetMachineContext(), runMaxSpeed, runAcceleration, runDeceleration, runResponsiveness);
     }
 
     public IMovementState createFallingState()
     {
-        return new FallingMovementState(GetMachineContext(), downForce);
+        return new FallingMovementState(GetMachineContext(), inAirDownForce);
     }
 
     public IMovementState createSlidingState()

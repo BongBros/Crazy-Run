@@ -29,7 +29,7 @@ public class Movement : MonoBehaviour, IMovementControl, IStateContext //TODO IM
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
-        animator = new MovementAnimation(transform.FindChild("Capsule"));
+        animator = new MovementAnimation(transform.FindChild("Model"));
         m_CollisionCheck = GetComponent<CollisionCheck>();
         m_StateFactory = GetComponent<IStateFactory>();
         this.constForce = GetComponent<ConstantForce>();
