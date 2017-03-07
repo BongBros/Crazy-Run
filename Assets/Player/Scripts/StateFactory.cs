@@ -49,6 +49,12 @@ public class StateFactory : MonoBehaviour, IStateFactory
     [SerializeField]
     private int jumpSustainLength;
 
+    //JUMPING
+    // resets vector Y coordinate to 0 right before initiating jump
+    // should the player jump with the same height even when moving down (e.g. falling down and doing a double jump)
+    [SerializeField]
+    private bool jumpIgnorePreviousVelocity;
+
     //JUMPING and FALLING
     // constant downward force(0, -downForce, 0) applied on every frame
     // causes player to fall faster when increased but also to jump lower; combined with increasing of jump force the player may jump with the same height but going faster up and down
@@ -72,7 +78,7 @@ public class StateFactory : MonoBehaviour, IStateFactory
     
     public IMovementState createJumpingState()
     {
-        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce);
+        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce, jumpIgnorePreviousVelocity);
     }
 
     public IMovementState createRunningState()

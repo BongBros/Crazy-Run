@@ -12,21 +12,26 @@ public class JumpingMovementState : MovementStateAdapter
 
     private int frameCounter = 0;
     private float downForce;
+    private bool ignorePreviousVelocity;
 
-    public JumpingMovementState(IMachineContext machineContext, float jumpForceInitial, float jumpForceSustain, int jumpForceSustainFrames, float downForce) : base(machineContext)
+    public JumpingMovementState(IMachineContext machineContext, float jumpForceInitial, float jumpForceSustain, int jumpForceSustainFrames, float downForce, bool ignorePreviousVelocity) : base(machineContext)
     {
         this.jumpForceInitial = jumpForceInitial;
         this.jumpForceSustain = jumpForceSustain;
         this.jumpForceSustainFrames = jumpForceSustainFrames;
         this.downForce = downForce;
+        this.ignorePreviousVelocity = ignorePreviousVelocity;
     }
 
     public override void OnEnter()
     {
-        control.SetMovementVector(new Vector2(control.GetMovementVector().x, 0f));
+        if (ignorePreviousVelocity)
+        {
+            control.SetMovementVector(new Vector2(control.GetMovementVector().x, 0f));
+        }
         control.SetConstantDownForce(downForce);
         control.AddForce(new Vector2(0f, jumpForceInitial));
-
+        animator.Jump();
 
     }
 

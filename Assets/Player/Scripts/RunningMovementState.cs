@@ -20,9 +20,16 @@ public class RunningMovementState : MovementStateAdapter
 
     public override void ProcessInput(PlayerInput input)
     {
+
         if (input.slide)
         {
             context.SwitchState(factory.createSlidingState());
+            return;
+        }
+
+        if (input.jump)
+        {
+            context.SwitchState(factory.createJumpingState());
             return;
         }
 
@@ -69,16 +76,12 @@ public class RunningMovementState : MovementStateAdapter
             }
             tempSpeed = responsivenessSpeed;
         }
-
-
+        
         control.SetMovementVector(new Vector2(tempSpeed, currentVector.y));
 
-        if (input.jump)
-        {
-            context.SwitchState(factory.createJumpingState());
-            return;
-        }
-
+        float animationSkew = input.horizontal;
+        //float animationSkew = Math.Min(tempSpeed / maxSpeed, 1);
+        animator.Run(animationSkew);
     }
 
     public override void LostGround()
