@@ -76,9 +76,9 @@ public class StateFactory : MonoBehaviour, IStateFactory
         
     }
     
-    public IMovementState createJumpingState()
+    public IMovementState createJumpingFromGroundState()
     {
-        return new JumpingMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce, jumpIgnorePreviousVelocity);
+        return new JumpingFromGroundMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce, jumpIgnorePreviousVelocity);
     }
 
     public IMovementState createRunningState()
@@ -101,4 +101,14 @@ public class StateFactory : MonoBehaviour, IStateFactory
         return this.m_MachineContext = new MachineContext(movement, movement, this, movement.getAnimator());
     }
 
+    public IMovementState createFallingJumpableState()
+    {
+        return new FallingJumpableMovementState(GetMachineContext(), inAirDownForce);
+    }
+
+    public IMovementState createJumpingFromAirState()
+    {
+        return new JumpingFromAirMovementState(GetMachineContext(), jumpForceInitial, jumpForceSustain, jumpSustainLength, inAirDownForce, jumpIgnorePreviousVelocity);
+
+    }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class JumpingMovementState : MovementStateAdapter
+public class JumpingFromGroundMovementState : MovementStateAdapter
 {
     private float jumpForceInitial;
     private float jumpForceSustain;
@@ -14,7 +14,7 @@ public class JumpingMovementState : MovementStateAdapter
     private float downForce;
     private bool ignorePreviousVelocity;
 
-    public JumpingMovementState(IMachineContext machineContext, float jumpForceInitial, float jumpForceSustain, int jumpForceSustainFrames, float downForce, bool ignorePreviousVelocity) : base(machineContext)
+    public JumpingFromGroundMovementState(IMachineContext machineContext, float jumpForceInitial, float jumpForceSustain, int jumpForceSustainFrames, float downForce, bool ignorePreviousVelocity) : base(machineContext)
     {
         this.jumpForceInitial = jumpForceInitial;
         this.jumpForceSustain = jumpForceSustain;
@@ -32,7 +32,6 @@ public class JumpingMovementState : MovementStateAdapter
         control.SetConstantDownForce(downForce);
         control.AddForce(new Vector2(0f, jumpForceInitial));
         animator.Jump();
-
     }
 
     public override void ProcessInput(PlayerInput input)
@@ -51,8 +50,13 @@ public class JumpingMovementState : MovementStateAdapter
             }
         } else
         {
-            context.SwitchState(factory.createFallingState());
+            GoToNextState();
         }
+    }
+
+    protected virtual void GoToNextState()
+    {
+        context.SwitchState(factory.createFallingJumpableState());
     }
 
     public override void Grounded()

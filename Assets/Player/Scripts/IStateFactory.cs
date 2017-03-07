@@ -1,7 +1,9 @@
 ﻿public interface IStateFactory
 {
-    IMovementState createJumpingState();
+    IMovementState createJumpingFromGroundState();
     IMovementState createRunningState();
     IMovementState createFallingState();
     IMovementState createSlidingState();
+    IMovementState createFallingJumpableState();
+    IMovementState createJumpingFromAirState();
 }

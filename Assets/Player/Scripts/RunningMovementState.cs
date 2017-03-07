@@ -29,7 +29,7 @@ public class RunningMovementState : MovementStateAdapter
 
         if (input.jump)
         {
-            context.SwitchState(factory.createJumpingState());
+            context.SwitchState(factory.createJumpingFromGroundState());
             return;
         }
 
